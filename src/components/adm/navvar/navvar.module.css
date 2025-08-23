@@ -1,0 +1,38 @@
+.con {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 84px;
+    background: #fff;
+    height: 100vh;
+    box-sizing: border-box;
+    padding-top: 64px;
+    border-right: 1px solid var(--my-border-color2);
+    z-index: 101;
+    transition: all 0.4s;
+    overflow: hidden;
+}
+
+.con::after {
+    position: absolute;
+    content: '';
+    width: 10px;
+    height: 100%;
+    background: #fff;
+    right: 0;
+    top: 0;
+}
+
+.con:hover {
+    width: 250px;
+}
+
+.con>ul>li {
+    padding: 5px 20px;
+}
+
+.con>ul>li>a {
+    font-size: var(--menu-font-size);
+    white-space: nowrap;
+    display: block;
+}

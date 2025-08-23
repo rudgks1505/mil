@@ -1,0 +1,52 @@
+.con_wrap {
+    width: 100%;
+    border-bottom: 1px solid var(--my-border-color2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #fff;
+}
+
+.con {
+    width: 100%;
+    height: 64px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    min-width: var(--min_width);
+    max-width: var(--max_width);
+    padding: var(--layout_padding);
+}
+
+.con_ul {
+    display: flex;
+}
+
+
+.con_ul>li>a,
+.con_ul>li:not(:has(a)) {
+    line-height: 64px;
+    display: inline-block;
+    font-size: var(--menu-font-size);
+    font-weight: 400;
+    padding: 0 20px;
+    cursor: pointer;
+}
+
+.con_ul>li:nth-of-type(1)>a {
+    font-weight: 700;
+}
+
+.logCon {
+    display: flex;
+    align-items: center;
+}
+
+.logCon a {
+    line-height: 64px;
+    display: inline-block;
+    font-size: 17px;
+    font-weight: 700;
+    padding: 0 20px;
+}

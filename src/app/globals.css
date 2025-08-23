@@ -1,42 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@100..900&display=swap');
+
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/autoplay';
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  --my-border-color: #e7e7e7;
+  --my-border-color2: #e2e2e2;
+  --book-box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.4);
+  --text_color1: #242424;
+  --text_color2: #6f6f6f;
+  --text_color3: #555555;
+  --text_color4: #333333;
+  --btn_color1: #333333;
+  --max_width: 1440px;
+  --min_width: 1200px;
+  --layout_padding: 0 40px;
+  --menu-font-size: 20px;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
   margin: 0;
 }
 
 a {
-  color: inherit;
   text-decoration: none;
+  color: #333;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+p,
+a,
+li,
+button,
+th,
+td,
+h1,
+h2,
+input {
+  font-family: "Noto Sans KR", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+input:focus {
+  outline: none;
+}
+
+input {
+  height: 20px
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  width: 80px;
+  height: 32px;
+  background: #333;
+  font-size: 12px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul>li {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0;
+  text-align: left;
+  box-sizing: border-box;
+  padding: 0 15px;
+  font-size: 14px;
+}
+
+td {
+  font-weight: 400;
+}
+
+.layout {
+  width: var(--max_width);
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: border-box;
 }

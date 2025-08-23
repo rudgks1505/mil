@@ -1,0 +1,36 @@
+.con {
+    width: auto;
+    height: auto;
+    background: #fff;
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 30px
+}
+
+.con_table th,
+.con_table td {
+    height: 35px;
+    border: 1px solid #e2e2e2;
+    box-sizing: border-box;
+}
+
+.con_table th {
+    background: #f8f9fa
+}
+
+.td.on {
+    padding: 0;
+}
+
+.td.on>span {
+    font-size: 0;
+}
+
+.td.on>input {
+    font-size: 14px;
+    border: 2px solid #a6daf4;
+    box-sizing: border-box;
+    padding: 0 15px;
+    color: #444;
+    width: 100%;
+    height: 100%;
+}
