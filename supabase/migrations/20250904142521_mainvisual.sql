@@ -1,0 +1,2 @@
+ALTER TABLE mainvisual
+ALTER COLUMN img_path SET DEFAULT '';

@@ -1,0 +1,31 @@
+.inpCon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.inpCon::after {
+    position: absolute;
+    left: 15px;
+    top: 6px;
+    content: '🔍';
+    font-size: 20px;
+}
+
+.inpCon>input {
+    width: calc(100% - 100px);
+    height: 44px;
+    border-radius: 20px;
+    background: var(--inp_color);
+    border: none;
+    font-size: 17px;
+    box-sizing: border-box;
+    padding-left: 55px;
+}
+
+.inpCon>input::placeholder {
+    font-size: 16px;
+    color: var(--text_color2);
+    font-weight: 400;
+}

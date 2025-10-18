@@ -1,0 +1,29 @@
+.con>h1 {
+    font-size: 20px;
+    color: var(--text_color1);
+    margin-bottom: 15px;
+    position: relative;
+}
+
+
+.topSwiper_slide {
+    width: 130px;
+    cursor: pointer;
+}
+
+
+.topSwiper_slide>h1 {
+    font-size: 16px;
+    font-weight: 700;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-top: 10px;
+    color: var(--text_color1);
+}
+
+.topSwiper_slide>p {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text_color3);
+}

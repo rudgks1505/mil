@@ -1,10 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
+import type { Database } from "@/types/supabase";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceRoleKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseServiceRoleKey) {
-    throw new Error('Supabase URL 또는 Service Key가 설정되지 않았습니다.');
+if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Supabase URL 또는 AnonKey가 설정되지 않았습니다.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);

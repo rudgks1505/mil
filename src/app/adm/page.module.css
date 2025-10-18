@@ -3,34 +3,79 @@
     height: auto;
     background: #fff;
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.05);
-    padding: 30px
+    padding: 50px 30px 30px 30px;
+    box-sizing: border-box;
+    margin-bottom: 120px;
+}
+
+.btn_con {
+    margin: 0px 0 20px;
+}
+
+.btn_con>button {
+    margin-right: 10px;
+}
+
+.scroll_con {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding-bottom: 30px;
+}
+
+.con_table {
+    border-collapse: separate;
 }
 
 .con_table th,
 .con_table td {
     height: 35px;
-    border: 1px solid #e2e2e2;
+    border: 1px solid var(--adm_table_border_color);
     box-sizing: border-box;
+    white-space: nowrap;
+    background: #fff
 }
 
 .con_table th {
-    background: #f8f9fa
+    background: var(--adm_table_th_color);
 }
 
-.td.on {
-    padding: 0;
+.con_table th>div {
+    display: flex;
+    align-items: center;
 }
 
-.td.on>span {
-    font-size: 0;
+.th1_sticky {
+    width: 50px;
+    position: sticky;
+    left: 0;
+    z-index: 201;
 }
 
-.td.on>input {
-    font-size: 14px;
-    border: 2px solid #a6daf4;
-    box-sizing: border-box;
-    padding: 0 15px;
-    color: #444;
-    width: 100%;
-    height: 100%;
+.th2_sticky {
+    position: sticky;
+    left: 103px;
+    z-index: 201;
+}
+
+.th3_sticky {
+    position: sticky;
+    left: 214px;
+    z-index: 201;
+}
+
+
+.con_table td input.active {
+    border-color: var(--active-color);
+}
+
+.con_table td textarea {
+    resize: none;
+    width: var(--adm_textarea_width);
+    height: var(--adm_textarea_height);
+}
+
+.reactSelect {
+    width: 600px;
+    margin: 10px 0;
 }

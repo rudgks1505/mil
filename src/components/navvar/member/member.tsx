@@ -1,12 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import styles from "./member.module.css";
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
 
+    const supabase = createClientComponentClient();
+    const router = useRouter();
     const [getSession, setgetSession] = useState<boolean>(false);
 
     const logoutF = async () => {
@@ -38,9 +39,12 @@ export default function Page() {
     return (
         <>
             {getSession == true ? (
-                <li onClick={logoutF}>로그아웃</li>
+                <>
+                    <li><button onClick={() => { router.push('/adm') }}>관리자페이지</button></li>
+                    <li><button onClick={logoutF}>로그아웃</button></li>
+                </>
             ) : (
-                <li><Link href="/login">로그인</Link></li>
+                <li><button onClick={() => { router.push('/auth/login') }}>로그인</button></li>
             )
             }
         </>

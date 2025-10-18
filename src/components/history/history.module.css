@@ -1,0 +1,48 @@
+.con {
+    margin: 40px 0 80px;
+    height: 400px;
+}
+
+.con>h1 {
+    font-size: 20px;
+    color: var(--text_color1);
+    margin-bottom: 15px;
+}
+
+.con>p {
+    font-size: 20px;
+    color: var(--text_color1);
+    margin-bottom: 15px;
+    text-align: center;
+    padding-top: 150px;
+}
+
+.Swiper_slide {
+    width: 145px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.Swiper_slide>h1 {
+    font-size: 16px;
+    color: var(--text_color1);
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 10px;
+}
+
+.Swiper_slide>h2 {
+    font-size: 14px;
+    color: var(--text_color2);
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.Swiper_slide>p {
+    font-size: 12px;
+    color: var(--text_color2);
+    font-weight: 400;
+    line-height: 15px;
+}

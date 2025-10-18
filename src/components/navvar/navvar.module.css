@@ -1,10 +1,26 @@
+@media (max-width: 599px) {
+    .con {
+        padding: 0 18px 0 10px;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1099px) {
+    .con {
+        padding: 0 2em 0 2em;
+    }
+}
+
+@media (min-width: 1100px) {
+    .con {
+        padding: 0 2em 0 2em;
+    }
+}
+
 .con_wrap {
     width: 100%;
     border-bottom: 1px solid var(--my-border-color2);
-    position: sticky;
-    top: 0;
-    z-index: 100;
     background: #fff;
+    font-size: 18px
 }
 
 .con {
@@ -14,39 +30,27 @@
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    min-width: var(--min_width);
     max-width: var(--max_width);
-    padding: var(--layout_padding);
 }
 
 .con_ul {
     display: flex;
 }
 
+.con_ul:nth-of-type(2)>li {
+    padding: 0 10px 0px 0 !important;
+}
 
 .con_ul>li>a,
 .con_ul>li:not(:has(a)) {
     line-height: 64px;
     display: inline-block;
-    font-size: var(--menu-font-size);
+    font-size: 1em;
     font-weight: 400;
-    padding: 0 20px;
+    padding: 0 1em;
     cursor: pointer;
 }
 
 .con_ul>li:nth-of-type(1)>a {
     font-weight: 700;
-}
-
-.logCon {
-    display: flex;
-    align-items: center;
-}
-
-.logCon a {
-    line-height: 64px;
-    display: inline-block;
-    font-size: 17px;
-    font-weight: 700;
-    padding: 0 20px;
 }

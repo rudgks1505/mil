@@ -1,0 +1,2 @@
+ALTER TABLE "public"."books"
+ADD COLUMN uuid UUID UNIQUE;

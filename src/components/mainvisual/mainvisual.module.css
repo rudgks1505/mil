@@ -1,8 +1,65 @@
+@media (max-width: 599px) {
+    .con {
+        height: 400px;
+        padding: 20px 0 50px 0;
+        box-sizing: border-box;
+        font-size: 24px;
+    }
+
+    .swiperSlide>a>div {
+        text-align: center;
+        padding: 70px 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+    }
+
+    .couter {
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1099px) {
+    .con {
+        height: 320px;
+        padding: 20px 0 50px 0;
+        box-sizing: unset;
+        font-size: 44px;
+    }
+
+    .swiperSlide>a>div {
+        text-align: left;
+        padding: 40px;
+    }
+
+    .couter {
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+@media (min-width: 1100px) {
+    .con {
+        height: 430px;
+        padding: 20px 0 50px 0;
+        box-sizing: unset;
+        font-size: 44px;
+    }
+
+    .swiperSlide>a>div {
+        text-align: left;
+        padding: 40px;
+    }
+
+    .couter {
+        bottom: 30px;
+        right: 30px;
+    }
+
+}
+
+
 .con {
     width: 100%;
-    height: 450px;
-    box-sizing: border-box;
-    padding-top: 20px;
 }
 
 .swiper {
@@ -10,8 +67,111 @@
     height: 100%;
     border-radius: 25px;
     overflow: hidden;
+    position: relative;
+}
+
+.prev,
+.next {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    color: var(--text_color2);
+    background: #fff;
+    transition: all .4s;
+    z-index: 999;
+}
+
+.prev:after,
+.next:after {
+    font-size: 15px !important;
+    font-weight: 700 !important;
 }
 
 .swiperSlide {
-    background: red;
+    width: 100%;
+    height: 100%;
+    background-position: right;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.swiperSlide>img {
+    object-fit: cover;
+}
+
+.swiperSlide>a {
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+    box-sizing: border-box;
+    bottom: 0;
+}
+
+.swiperSlide>a>div>h1 {
+    font-size: 1em;
+    color: #fff;
+}
+
+.swiperSlide>a>div>h1>pre {
+    font-family: "Noto Sans KR", serif;
+    margin: 0 !important;
+    margin-bottom: 10px !important;
+    line-height: 1.2em;
+}
+
+.swiperSlide>a>div>p {
+    font-size: 17px;
+    color: #fff;
+    font-weight: 400;
+}
+
+.couter {
+    width: 100px;
+    height: 32px;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    z-index: 999;
+}
+
+.couter>li:nth-of-type(1) {
+    width: 32px;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.couter>li:nth-of-type(2) {
+    width: 35px;
+    height: 100%;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.couter>li:nth-of-type(1)>p {
+    font-size: 12px;
+    line-height: 0px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.couter>li:nth-of-type(2)>p {
+    font-size: 16px;
+    line-height: 0px;
+}
+
+.couter>li:nth-of-type(2)>p:nth-of-type(1) {
+    color: #fff;
+}
+
+.couter>li:nth-of-type(2)>p:not(:nth-of-type(1)) {
+    color: rgba(255, 255, 255, 0.7);
 }

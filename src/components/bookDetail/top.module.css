@@ -1,0 +1,217 @@
+@media (max-width: 599px) {
+    .con {
+        font-size: 20px;
+        padding: 0;
+        border: none;
+    }
+
+    .con_l {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .con_r {
+        width: 100%;
+        height: 320px;
+        min-width: unset;
+        margin-top: 20px;
+    }
+
+    .con_r_top {
+        padding: 1em 1em 0px 1em;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1099px) {
+    .con {
+        font-size: 24px;
+        padding: 0;
+        border: none;
+    }
+
+    .con_l {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .con_r {
+        width: 100%;
+        height: 400px;
+        min-width: unset;
+        margin-top: 20px;
+    }
+
+    .con_r_top {
+        padding: 2em 1.5em 0px 1.5em;
+    }
+}
+
+@media (min-width: 1100px) {
+    .con {
+        font-size: 20px;
+        padding: 1em;
+        border-left: 1px solid var(--my-border-color2);
+        border-right: 1px solid var(--my-border-color2);
+        border-bottom: 1px solid var(--my-border-color2);
+    }
+
+    .con_l {
+        width: 40%;
+        min-width: 400px;
+    }
+
+    .con_r {
+        width: calc(60% - 20px);
+        height: 480px;
+        min-width: calc(60% - 20px);
+    }
+
+    .con_r_top {
+        padding: 2em 1.5em 0px 1.5em;
+    }
+}
+
+
+.con {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    flex-wrap: wrap;
+}
+
+.con_l {
+    flex-shrink: 0;
+    height: 480px;
+    border-radius: var(--layout-radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cover_bak {
+    width: 100%;
+    height: 100%;
+    filter: blur(30px) sepia(0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-repeat: repeat;
+    background-size: auto;
+    background-position: center;
+}
+
+.con_r {
+    flex-shrink: 0;
+    border-radius: var(--layout-radius);
+    border: 1px solid var(--my-border-color2);
+    overflow: hidden;
+}
+
+.con_r_top {
+    box-sizing: border-box;
+    height: calc(100% - 3.2em);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.con_r_top_meta>h1 {
+    font-size: var(--detailh1Size);
+    font-weight: 700;
+    color: var(--text_color1);
+}
+
+.con_r_top_meta>p {
+    font-size: var(--detailpSize);
+    font-weight: 700;
+    color: var(--text_color3);
+    margin: 1em 0;
+}
+
+.con_r_top_meta>ul {
+    display: flex;
+}
+
+.con_r_top_meta>ul>li {
+    font-size: var(--detailliSize);
+    font-weight: 400;
+    color: var(--text_color4);
+    position: relative;
+    margin-right: 1.4em;
+}
+
+.con_r_top_meta>ul>li:not(:last-child)::after {
+    width: 2px;
+    height: 2px;
+    background: var(--text_color4);
+    border-radius: 50%;
+    position: absolute;
+    content: '';
+    right: -0.6em;
+    top: 0.7em;
+}
+
+.con_r_top_hit {
+    height: 4em;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--my-border-color2);
+    align-items: center;
+}
+
+.con_r_top_hit>span {
+    font-size: 1.1em;
+    padding: 10px;
+    display: inline-block;
+    color: var(--text_color2);
+    cursor: pointer;
+}
+
+.con_r_top_hit>p {
+    font-size: var(--detailpSize);
+    font-weight: 400;
+    color: var(--text_color3);
+}
+
+.con_r_bottom {
+    height: 3.2em;
+}
+
+.con_r_bottom>button {
+    width: 50%;
+    height: 100%;
+    border-radius: unset;
+    font-size: var(--detailpSize);
+    font-weight: 400;
+}
+
+
+.con_r_bottom>button:last-child {
+    width: 50%;
+    height: 100%;
+    border-radius: unset;
+    font-size: var(--detailpSize);
+    font-weight: 400;
+    background: #fff;
+    border-top: 1px solid var(--my-border-color2);
+    color: #000;
+}
+
+.con_review {
+    padding: 2em 1.5em 0px 1.5em;
+    box-sizing: border-box;
+    height: calc(100% - 3.2em);
+    overflow-y: scroll;
+}
+
+.con_review>p {
+    font-size: var(--detailpSize);
+    color: var(--text_color4);
+    margin-bottom: 2em;
+}

@@ -1,0 +1,84 @@
+@media (max-width: 599px) {
+    .swiperCon {
+        padding: 0px 0 20px;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1099px) {
+    .swiperCon {
+        padding: 10px 0 20px;
+    }
+}
+
+@media (min-width: 1100px) {
+
+    .swiperCon {
+        padding: 10px 0 20px;
+    }
+}
+
+.con {
+    padding: 50px 0 30px;
+}
+
+
+
+.con>h1 {
+    font-size: 20px;
+    color: var(--text_color1);
+    margin-bottom: 15px;
+}
+
+
+.slideLi {
+    width: calc(1360px / 4);
+    height: 120px;
+    display: flex;
+    cursor: pointer;
+    position: relative;
+    box-sizing: border-box;
+    padding-left: 10px;
+    margin-top: 20px;
+}
+
+.slideLi>h1 {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    font-size: 45px;
+    color: white;
+    text-shadow:
+        0 0 2px rgba(0, 0, 0, 0.6),
+        0 0 4px rgba(0, 0, 0, 0.8);
+}
+
+.slideLi>div {
+    width: calc(100% - 80px);
+    box-sizing: border-box;
+    padding-left: 20px;
+}
+
+.slideLi>div>span {
+    font-size: 12px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.slideLi>div>span>i {
+    font-style: normal !important;
+}
+
+
+.slideLi>div>h1 {
+    position: relative;
+    font-size: 16px;
+    color: var(--text_color1);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.slideLi>div>p {
+    font-size: 14px;
+    color: var(--text_color2);
+}

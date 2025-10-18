@@ -1,0 +1,130 @@
+@media (max-width: 599px) {
+    .option_con {
+        font-size: 20px;
+    }
+
+    .option_con>ul {
+        width: 100%;
+    }
+
+    .con>ul {
+        height: 120px;
+    }
+
+    .rendition_wrap {
+        height: calc(100dvh - 120px);
+    }
+
+    .con>ul>li:last-child>button {
+        min-width: 70px !important;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1099px) {
+    .option_con {
+        font-size: 24px;
+    }
+
+    .option_con>ul {
+        width: 50%;
+    }
+
+    .con>ul {
+        height: 80px;
+    }
+
+    .rendition_wrap {
+        height: calc(100dvh - 80px);
+    }
+}
+
+@media (min-width: 1100px) {
+    .option_con {
+        font-size: 20px;
+    }
+
+    .option_con>ul {
+        width: 20%;
+    }
+
+    .con>ul {
+        height: 80px;
+    }
+
+    .rendition_wrap {
+        height: calc(100dvh - 80px);
+    }
+}
+
+
+.option_con {
+    border: 1px solid var(--my-border-color2);
+    box-sizing: border-box;
+    margin: 1.5em 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em 0;
+}
+
+.option_con>ul {
+    display: inline-flex;
+    vertical-align: middle;
+    justify-content: center;
+    height: 2em;
+    padding: 0.3em 0;
+}
+
+
+.option_con>ul>li {
+    width: 20%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.option_con>ul>li>span {
+    display: inline-block;
+}
+
+
+.rendition_wrap {
+    border: 1px solid var(--my-border-color2);
+    margin-bottom: 30px;
+}
+
+.option_color>li>span {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border: 1px solid #e2e2e2;
+}
+
+.option_fontColor>li {
+    font-size: 1.4em;
+}
+
+.con {
+    position: sticky;
+    top: 0px;
+    margin-bottom: 100px;
+}
+
+.con>ul {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.con>ul>li>*:not(:first-child) {
+    margin-left: 10px;
+}
+
+.option_drag>li {
+    border-radius: none;
+}

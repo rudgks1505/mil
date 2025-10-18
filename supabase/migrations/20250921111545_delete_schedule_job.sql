@@ -1,0 +1,1 @@
+select unschedule_job('daily-log-cleanup');

@@ -1,0 +1,20 @@
+.con {
+    margin: 10px 0;
+}
+
+.genrebtn {
+    font-size: 14px;
+    line-height: 14px;
+    padding: 8px 12px;
+    color: var(--text_color2);
+    margin-right: 8px;
+    border: 1px solid var(--my-border-color2);
+    border-radius: 30px;
+    cursor: pointer;
+    background: #fff;
+}
+
+.genrebtn.on {
+    color: var(--text_color1);
+    border: 1px solid var(--text_color1);
+}
