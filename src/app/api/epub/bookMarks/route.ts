@@ -4,7 +4,7 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import crypto from 'node:crypto';
 
-const CACHE_CTRL = 'public, max-age=3600, stale-while-revalidate=3600';
+const CACHE_CTRL = 'public, no-cache';
 
 export async function POST(req: Request) {
     try {

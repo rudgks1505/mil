@@ -7,7 +7,7 @@ import { publicMainvisualInsertSchema } from "@/types/zodSchemas";
 import sharp from 'sharp';
 import crypto from 'node:crypto';
 
-const CACHE_CTRL = 'public, max-age=3600, stale-while-revalidate=3600';
+const CACHE_CTRL = 'public, no-cache';
 
 const mainvisual_delete = async (supabase: any, id: number) => {
     const { error: delete_err } = await supabase
