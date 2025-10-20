@@ -5,8 +5,16 @@ export default function Page() {
         <div className={styles.con}>
             <div>
                 <p>Next.js 15 · Supabase · Vercel</p>
-                <p><span>Email: rudgks1505@gmail.com ·</span>&nbsp;<span>GitHub: github.com/yourname</span></p>
+                <p><span>Email: rudgks1505@gmail.com ·</span>&nbsp;
+                    <a
+                        href="https://github.com/rudgks1505/mil"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        GitHub: https://github.com/rudgks1505/mil
+                    </a>
+                </p>
             </div>
-        </div>
+        </div >
     );
 }
