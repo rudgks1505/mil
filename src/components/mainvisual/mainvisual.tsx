@@ -69,8 +69,7 @@ export default function Page() {
                                     <Image
                                         src={userSize >= 600 ? `/img/mainvisual/${el.img_path}` : `/img/mainvisual/${el.img_path_m}`}
                                         alt="슬라이더 이미지"
-                                        width={userSize >= 600 ? 1360 : 335}
-                                        height={userSize >= 600 ? 430 : 330}
+                                        fill
                                     />
                                     <Link href={el.book_link || '#'}
                                         target={el.book_link ? '_blank' : '_self'}

@@ -60,6 +60,7 @@
 
 .con {
     width: 100%;
+    height: 430px;
 }
 
 .swiper {
@@ -91,13 +92,7 @@
 .swiperSlide {
     width: 100%;
     height: 100%;
-    background-position: right;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-.swiperSlide>img {
-    object-fit: cover;
+    position: relative;
 }
 
 .swiperSlide>a {
