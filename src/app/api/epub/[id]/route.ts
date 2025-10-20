@@ -6,7 +6,7 @@ import crypto from 'node:crypto';
 
 const CACHE_CTRL = 'public, max-age=3600, stale-while-revalidate=3600';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const resolvedParams = await params;
         const params_id = resolvedParams.id;

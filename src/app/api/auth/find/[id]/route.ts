@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { supabaseAdm } from '@/lib/supabaseAdm';
 import { joinSchema } from "@/types/schemas";
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const resolvedParams = await params;
         const params_id = resolvedParams.id;
