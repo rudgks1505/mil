@@ -40,7 +40,7 @@ export default function Page({ onChildClick }: ChildProps) {
 
             {genres.map((el, index) => {
                 return (
-                    <SwiperSlide style={{ width: 'auto' }}>
+                    <SwiperSlide style={{ width: 'auto' }} key={index}>
                         <button className={`${styles.genrebtn} ${toggle === el.value && styles.on}`}
                             key={index}
                             onClick={() => {

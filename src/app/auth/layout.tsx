@@ -1,9 +1,10 @@
 import styles from "./page.module.css";
 import Image from 'next/image';
 import AuthChangeWrapper from '@/components/AuthChangeWrapper/AuthChangeWrapper';
+import type { ReactNode } from "react";
 
 interface RootLayoutProps {
-    children: React.ReactNode;
+    children: ReactNode;
 }
 export default function RootLayout({ children }: RootLayoutProps) {
 

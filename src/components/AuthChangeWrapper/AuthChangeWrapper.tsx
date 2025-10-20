@@ -11,7 +11,7 @@ export default function SupabaseAuthListener() {
     const pathname = usePathname();
 
     useEffect(() => {
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             if (pathname.startsWith('/adm')) {
                 if (!session) router.replace('/');
             }
@@ -28,7 +28,7 @@ export default function SupabaseAuthListener() {
         return () => {
             subscription.unsubscribe();
         };
-    }, [supabase]);
+    }, [supabase, pathname, router]);
 
     return null;
 }

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { joinSchema } from "@/types/schemas";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
-export default function Page(): React.ReactElement {
+export default function Page() {
 
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
@@ -64,8 +64,9 @@ export default function Page(): React.ReactElement {
                 return;
             }
 
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
     }

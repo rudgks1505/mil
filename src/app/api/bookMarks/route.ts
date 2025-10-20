@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
             return { ...data }
         }));
 
-        const signItems = results.filter((row) => row.status == 'fulfilled').map((row, i) => {
+        const signItems = results.filter((row) => row.status == 'fulfilled').map((row, _i) => {
             const success = row.value;
             const set_obj = omit(success, ['owner']);
             return { ...set_obj };
@@ -98,8 +98,9 @@ export async function GET(req: NextRequest) {
         res.headers.set('ETag', etag);
         res.headers.set('Cache-Control', CACHE_CTRL);
         return res;
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) console.error(err.message);
+        else console.error(err);
         return NextResponse.json({ message: '요청 처리 중 오류.' }, { status: 500 });
     }
 }

@@ -2,14 +2,14 @@
 
 import styles from "../page.module.css";
 import { useRouter } from 'next/navigation';
-import { useUuidUpdate } from "@/hook/hook";
+import { UuidUpdate } from "@/lib/adm/utils";
 import Search from "@/components/search/search";
 
 
 export default function Page() {
 
     const router = useRouter();
-    const { uuidUpdate } = useUuidUpdate();
+    const { uuidUpdate } = UuidUpdate();
 
 
     const handleChildSearch = (val: string) => {
@@ -30,8 +30,9 @@ export default function Page() {
             if (!uuid) throw new Error('유효성 검사 실패');
 
             router.push(`/adm/chapters/${uuid}`);
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
 

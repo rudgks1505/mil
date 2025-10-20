@@ -1,11 +1,10 @@
 import { NextResponse, NextRequest } from 'next/server'
 import { z } from 'zod';
 import { publicBooksInsertSchema, publicBooksRowSchema } from "@/types/zodSchemas";
-import { deleteItemsSchema, deleteItems, BooksRow, BooksRowSchema } from "@/types/schemas";
-import type { Tables, TablesUpdate } from "@/types/helper";
+import { deleteItemsSchema, deleteItems } from "@/types/schemas";
+import type { TablesUpdate } from "@/types/helper";
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-import crypto from 'node:crypto';
 
 export async function GET(_req: NextRequest) {
     try {
@@ -31,8 +30,9 @@ export async function GET(_req: NextRequest) {
         }
 
         return NextResponse.json({ data: zodItems.data }, { status: 200 });
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) console.error(err.message);
+        else console.error(err);
         return NextResponse.json({ message: '요청 처리 중 오류.' }, { status: 500 });
     }
 }
@@ -62,7 +62,9 @@ export async function PUT(req: Request) {
         }
 
         return NextResponse.json({ status: 200 });
-    } catch (err: any) {
+    } catch (err: unknown) {
+        if (err instanceof Error) console.error(err.message);
+        else console.error(err);
         return NextResponse.json({ message: '요청 처리 중 오류.' }, { status: 500 });
     }
 }
@@ -94,8 +96,9 @@ export async function DELETE(req: Request) {
         }
 
         return NextResponse.json({ status: 200 });
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) console.error(err.message);
+        else console.error(err);
         return NextResponse.json({ message: '요청 처리 중 오류.' }, { status: 500 });
     }
 }

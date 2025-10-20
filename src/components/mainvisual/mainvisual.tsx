@@ -6,16 +6,17 @@ import { useEffect, useState, useRef } from 'react';
 import { Swiper as SwiperComponent, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import Link from "next/link";
-import { Mainvisual, MainvisualSchema } from "@/types/schemas";
+import { Mainvisual } from "@/types/schemas";
 import { mainvisualGet } from "@/lib/adm/utils";
 import { debounce } from "lodash";
 import Image from 'next/image';
+import type { Swiper as SwiperType } from 'swiper';
 
 export default function Page() {
 
 
-    const { data: item, error, isLoading } = useSWR<Mainvisual[]>("/api/mainvisual", mainvisualGet);
-    const swiperRef = useRef<any>(null);
+    const { data: item, error } = useSWR<Mainvisual[]>("/api/mainvisual", mainvisualGet);
+    const swiperRef = useRef<SwiperType | null>(null);
     const [swipeIndex, setSwipeIndex] = useState<number>(0);
     const [swipePause, setSwipePause] = useState<boolean>(false);
     const [userSize, setUserSize] = useState<number>(0)
@@ -29,7 +30,10 @@ export default function Page() {
         window.addEventListener("resize", update);
         update();
 
-        return () => window.removeEventListener("resize", update);
+        return () => {
+            window.removeEventListener("resize", update);
+            update.cancel();
+        }
     }, []);
 
 
@@ -65,7 +69,8 @@ export default function Page() {
                                     <Image
                                         src={userSize >= 600 ? `/img/mainvisual/${el.img_path}` : `/img/mainvisual/${el.img_path_m}`}
                                         alt="슬라이더 이미지"
-                                        fill
+                                        width={userSize >= 600 ? 1360 : 335}
+                                        height={userSize >= 600 ? 430 : 330}
                                     />
                                     <Link href={el.book_link || '#'}
                                         target={el.book_link ? '_blank' : '_self'}

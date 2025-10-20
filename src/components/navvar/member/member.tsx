@@ -17,14 +17,12 @@ export default function Page() {
             if (error) {
                 console.error(error);
                 alert('로그아웃 중 오류가 발생했습니다.');
-            } else {
-                console.log('로그아웃 성공');
             }
         }
     };
 
     useEffect(() => {
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             if (session) {
                 setgetSession(true);
             } else {
@@ -34,7 +32,7 @@ export default function Page() {
         return () => {
             subscription.unsubscribe();
         };
-    }, []);
+    }, [supabase]);
 
     return (
         <>

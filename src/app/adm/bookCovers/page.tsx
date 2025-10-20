@@ -3,7 +3,8 @@
 import styles from "../page.module.css";
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useAppDispatch, useUuidUpdate } from "@/hook/hook";
+import { useAppDispatch } from "@/hook/hook";
+import { UuidUpdate } from "@/lib/adm/utils";
 import { on, off } from "@/store/loaderSlice";
 import Select, { type StylesConfig } from "react-select";
 import { BookCoverSelectOption, BookCoverSelectOptionSchema, ReactSelect, BooksRow, BooksRowSchema } from "@/types/schemas";
@@ -36,8 +37,9 @@ export default function Page() {
             });
 
             return zodItems.data
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
     }
@@ -70,9 +72,10 @@ export default function Page() {
             dispatch(off());
             alert('생성완료');
 
-        } catch (error: any) {
+        } catch (err: unknown) {
             dispatch(off());
-            alert(error.message);
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
     }
@@ -125,13 +128,13 @@ export default function Page() {
     })
 
     const [selectTypography, SetselectTypography] = useState<BookCoverSelectOption['typography'][]>(['']);
-    const [selectLayout, SetselectLayout] = useState<BookCoverSelectOption['layout'][]>([
+    const [selectLayout, _setselectLayout] = useState<BookCoverSelectOption['layout'][]>([
         "clean editorial grid.",
         "wide margins, balanced white space.",
         "natural and harmonious placement of text.",
     ]);
 
-    const [selectTexture, SetselectTexture] = useState<BookCoverSelectOption['texture'][]>([
+    const [selectTexture, _setselectTexture] = useState<BookCoverSelectOption['texture'][]>([
         "subtle paper grain texture.",
         "matte paper finish.",
         "recycled paper texture.",
@@ -150,7 +153,7 @@ export default function Page() {
         "handmade paper grain.",
     ]);
 
-    const { uuidUpdate } = useUuidUpdate();
+    const { uuidUpdate } = UuidUpdate();
     const [items, setItems] = useState<BooksRow>()
     const dispatch = useAppDispatch();
     const [searchBook, setSearchBook] = useState<number>(0);
@@ -184,7 +187,7 @@ export default function Page() {
             width: 400,
         }),
         // 상단 입력/박스(포커스 테두리/그림자 제거)
-        control: (base, state) => ({
+        control: (base, _state) => ({
             ...base,
             boxShadow: "none",
             borderColor: "#ccc",
@@ -224,7 +227,7 @@ export default function Page() {
             setBook_uuid(uuid);
             setKey(true);
         })()
-    }, [searchBook])
+    }, [searchBook, uuidUpdate])
 
     if (isLoading) return <p>로딩 중...</p>;
     if (error) return <p>데이터를 불러오는 중 오류가 발생했습니다: {error.message}</p>;

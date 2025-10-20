@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error: importing via npm: may not resolve types in this environment
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /// <reference types="deno" />

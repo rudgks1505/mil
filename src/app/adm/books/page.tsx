@@ -38,9 +38,11 @@ export default function Page() {
 
             dispatch(off());
             alert('생성 완료');
-        } catch (error: any) {
+        } catch (err: unknown) {
             dispatch(off());
-            alert(error.message);
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
+            return
         };
     }
     const dispatch = useAppDispatch();
@@ -53,7 +55,7 @@ export default function Page() {
             width: 400,
             padding: 10,
         }),
-        control: (base, state) => ({
+        control: (base, _state) => ({
             ...base,
             boxShadow: "none",
             borderColor: "#ccc",

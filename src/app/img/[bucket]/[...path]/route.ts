@@ -19,10 +19,8 @@ export async function GET(
             return new Response('Not Found', { status: 404 });
         }
 
-        const url = new URL(req.url);
-
-        let buffer = Buffer.from(await data.arrayBuffer()) as any;
-        let contentType = data.type ?? 'image/webp';
+        const buffer = Buffer.from(await data.arrayBuffer()) as any;
+        const contentType = data.type ?? 'image/webp';
 
         const etag = `W/"${crypto.createHash('sha1').update(buffer).digest('hex')}"`;
 

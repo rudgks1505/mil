@@ -1,29 +1,28 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import styles from "@/app/adm/page.module.css";
 import useSWR, { mutate } from "swr";
 import { z } from 'zod';
 import { publicMainvisualInsertSchema } from "@/types/zodSchemas";
-import type { Tables } from "@/types/helper";
-import { deleteItemsSchema, slide_order } from "@/types/schemas";
-import { useUploadstate, useToggle, useDelete } from "@/hook/hook";
-import { fileSet, ContentChage, mainvisualGet } from "@/lib/adm/utils";
-import { Mainvisual, MainvisualSchema } from "@/types/schemas";
+import { deleteItemsSchema, slide_order, upload } from "@/types/schemas";
+import { useDelete } from "@/hook/hook";
+import { fileSet, ContentChage, mainvisualGet, Toggle, } from "@/lib/adm/utils";
+import { Mainvisual } from "@/types/schemas";
 import omit from 'lodash/omit';
 
 interface ChildProps {
     onDataSent: (data: slide_order) => void;
 }
 
-export default function Page({ onDataSent }: ChildProps): React.ReactElement {
+export default function Page({ onDataSent }: ChildProps) {
 
     const mainvisualUpdate = async (
     ) => {
         try {
             if (!confirm('수정하시겠습니까?')) return false;
 
-            const updateItem = items.map((el) => omit(el, ["img_signed", "img_signed_m"]))
+            const updateItem = items.map((el) => omit(el, ["img_path", "img_path_m"]))
 
             const zodResult = z.array(publicMainvisualInsertSchema).superRefine((val, ctx) => {
 
@@ -48,8 +47,7 @@ export default function Page({ onDataSent }: ChildProps): React.ReactElement {
                             }
                         })
                     }
-                    el.title.trim() == "" && (issues('title', i));
-                    console.log(uploadstate[i]);
+                    if (el.title.trim() == "") (issues('title', i));
                     if ((uploadstate[i].file instanceof File && !(uploadstate[i].m?.file instanceof File)) ||
                         (!(uploadstate[i].file instanceof File) && uploadstate[i].m?.file instanceof File)
                     ) {
@@ -66,7 +64,7 @@ export default function Page({ onDataSent }: ChildProps): React.ReactElement {
             }
 
             const fd = new FormData();
-            uploadstate.forEach((el, i) => {
+            uploadstate.forEach((el) => {
                 fd.append('id', String(el.id));
                 fd.append('file', el.file ? el.file : 'null');
                 fd.append('m', el.m ? el.m.file : 'null');
@@ -82,8 +80,9 @@ export default function Page({ onDataSent }: ChildProps): React.ReactElement {
             if (!res.ok) throw new Error(data.message || '알 수 없는 오류가 발생했습니다.');
             mutate("/api/adm/mainvisual");
             alert('업데이트 완료');
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
     }
@@ -106,41 +105,52 @@ export default function Page({ onDataSent }: ChildProps): React.ReactElement {
             if (!res.ok) throw new Error(data.message || '알 수 없는 오류가 발생했습니다.');
             mutate("/api/adm/mainvisual");
             alert('삭제 완료');
-        } catch (error: any) {
-            alert(error.message);
-            return;
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
+            return
         };
     }
 
-    const { data: item, error, isLoading } = useSWR<Mainvisual[]>("/api/adm/mainvisual", mainvisualGet);
+    const { data: item, error } = useSWR<Mainvisual[]>("/api/adm/mainvisual", mainvisualGet);
     const [items, setItems] = useState<Mainvisual[]>([]);
     const [originItems, setOriginItems] = useState<Mainvisual[]>([]);
     const { deleteItems, setDeleteItems } = useDelete();
     const [allToggle, setAllToggle] = useState<Set<number>>(new Set());
 
-    const { uploadstate, setUploadstate } = useUploadstate();
+    const [uploadstate, setUploadstate] = useState<upload[]>([{
+        file: null,
+        id: 0,
+        m: null,
+    }]);
+
+    const send_slide_order = useMemo<slide_order>(() => {
+        if (!item) return [];
+        return item.map(el => ({ id: el.id, slide_order: el.slide_order }));
+    }, [item]);
+
+    const setUploadstateCall = useCallback(() => {
+        if (!item) return
+        setUploadstate((prev) => {
+            const copy = structuredClone(prev);
+            for (let i = 0; i < item.length; i++) {
+                copy[i] = { ...copy[0] };
+            }
+            return copy
+        })
+    }, [item])
+
 
 
     useEffect(() => {
         if (item) {
-            const send_slide_order: slide_order = item.map((el) => {
-                return { id: el.id, slide_order: el.slide_order }
-            });
             onDataSent(send_slide_order);
             setItems(item.map(el => ({ ...el })));
             setOriginItems(item.map(el => ({ ...el })));
             setAllToggle(new Set(item.map(el => el.id)));
-            if (uploadstate.length === 1) {
-                setUploadstate((prev) => {
-                    const copy = structuredClone(prev);
-                    for (let i = 0; i < item.length; i++) {
-                        copy[i] = { ...copy[0] };
-                    }
-                    return copy
-                });
-            }
+            setUploadstateCall()
         }
-    }, [item]);
+    }, [item, setUploadstateCall, onDataSent, send_slide_order]);
 
     if (error) return <p>데이터를 불러오는 중 오류가 발생했습니다: {error.message}</p>;
 
@@ -166,7 +176,7 @@ export default function Page({ onDataSent }: ChildProps): React.ReactElement {
                                 <th className={styles.th2_sticky} style={{ left: "90px" }}>슬라이더 순서</th>
                                 <th>
                                     <div>삭제<input type="checkbox" onChange={(e) => {
-                                        useToggle(e.target.checked, [...allToggle], setDeleteItems);
+                                        Toggle(e.target.checked, [...allToggle], setDeleteItems);
                                     }} /></div>
                                 </th>
                                 <th>제목</th>
@@ -214,7 +224,7 @@ export default function Page({ onDataSent }: ChildProps): React.ReactElement {
                                         <td>
                                             <input type="checkbox"
                                                 onChange={(e) => {
-                                                    useToggle(e.target.checked, [el.id], setDeleteItems);
+                                                    Toggle(e.target.checked, [el.id], setDeleteItems);
                                                 }}
                                                 checked={deleteItems.has(el.id) ?? false}
                                             />

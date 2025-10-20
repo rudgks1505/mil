@@ -55,7 +55,8 @@ export async function GET(req: NextRequest) {
                 .from('books')
                 .select('*')
                 .not('img_path', 'eq', '')
-                .ilike('title', `%${search}%`);
+                .ilike('title', `%${search}%`)
+                .order('today_rank', { ascending: true });
         }
 
         const { data: hit_data, error: hit_err } = query;
@@ -91,8 +92,9 @@ export async function GET(req: NextRequest) {
         res.headers.set('ETag', etag);
         res.headers.set('Cache-Control', CACHE_CTRL);
         return res;
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) console.error(err.message);
+        else console.error(err);
         return NextResponse.json({ message: '요청 처리 중 오류.' }, { status: 500 });
     }
 }

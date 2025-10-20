@@ -1,8 +1,8 @@
 import { upload } from "@/types/schemas";
 import type { Tables } from "@/types/helper";
-import { any, z } from 'zod';
-import { publicMainvisualRowSchema, publicBooksRowSchema } from "@/types/zodSchemas";
+import { z } from 'zod';
 import { BooksRow, BooksRowSchema, Mainvisual, MainvisualSchema } from "@/types/schemas";
+import { BooksRowRank } from "@/types/schemas";
 
 type MainvisualRow = Omit<Tables<"mainvisual">, 'img_path' | 'img_path_m' | 'owner'>;
 
@@ -48,7 +48,7 @@ export const mainvisualGet = async (path: string
         }
 
         return zodResult.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         throw error; //swr error로 던지기
     }
 
@@ -71,32 +71,99 @@ export const booksGet = async (uuid: string): Promise<BooksRow[]> => {
         }
 
         return zodResult.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         throw error;
     }
 
 }
 
+export const Toggle = (
+    boolean: boolean,
+    id: number[],//[] 전체 토글 같이 처리
+    setValue: React.Dispatch<React.SetStateAction<Set<number>>>
+) => {
 
-// export async function getPrivateImageUrl(bucket: string, imagePath: string,) {
-//     console.log("hit?", getCached(imagePath));
-//     const hit = getCached(imagePath);
-//     console.log("hit check:", { imagePath, hit, type: typeof hit, truthy: !!hit });
-//     if (!imagePath) return
+    setValue((prev) => {
+        const copy = new Set(prev);
+        id.forEach((el) => {
+            if (boolean) {
+                copy.add(el);
+            } else {
+                copy.delete(el);
+            }
+        });
 
-//     if (hit) return hit;
+        return copy;
+    });
+};
 
-//     const supabase = createClientComponentClient();
+export const UuidUpdate = () => {
+    const uuidUpdate =
+        async (
+            id: number,
+        ) => {
+            try {
+                const zodResult = z.number().safeParse(id);
+                if (!zodResult.success) {
+                    console.error(zodResult.error.issues);
+                    throw new Error("유효성 검사 실패");
+                }
+
+                const res = await fetch(`/api/adm/UUID/books?id=${id}`);
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || '알 수 없는 오류가 발생했습니다.');
+
+                return data.data
+            } catch (err: unknown) {
+                if (err instanceof Error) alert(err.message);
+                else console.error(err);
+                return
+            };
+        }
+
+    return { uuidUpdate }
+
+}
 
 
-//     const { data, error } = await supabase
-//         .storage
-//         .from(bucket)
-//         .createSignedUrl(imagePath, 43200);//2번째인자 시간(초)
+export function RankCalc(setValue: React.Dispatch<React.SetStateAction<BooksRowRank[]>>, g: string) {
+    if (g === '전체') {
+        setValue((prev) => {
+            const copy = prev.map(obj => ({ ...obj }));
+            const send = copy.map((el) => {
+                if (el.today_rank === null) return { ...el, rankCalc: { state: 'rank_none', calc: 0 } };
 
-//     if (error) return console.warn(error);
+                if (el.last_rank === null) return { ...el, rankCalc: { state: 'rank_new', calc: 0 } }
 
-//     setCached(imagePath, data.signedUrl, 43200);
+                if (el.today_rank > el.last_rank) return { ...el, rankCalc: { state: 'rank_down', calc: (el.today_rank - el.last_rank) } }
 
-//     return data.signedUrl;
-// }
+                if (el.last_rank > el.today_rank) return { ...el, rankCalc: { state: 'rank_up', calc: (el.last_rank - el.today_rank) } }
+
+                return { ...el, rankCalc: { state: 'rank_same', calc: 0 } };
+            })
+            return send
+        });
+    } else {
+        setValue((prev) => {
+            const copy = prev.filter(obj => obj.genre === g).map(obj => ({ ...obj }));
+
+            const lat = copy.sort((a, b) => (a.last_rank ?? Infinity) - (b.last_rank ?? Infinity)).map((el, index) => {
+                return { ...el, last_rank: el.last_rank === null ? Infinity : index };
+            });
+
+            const send = lat.sort((a, b) => (a.today_rank ?? Infinity) - (b.today_rank ?? Infinity)).map((el, index) => {
+                if (el.today_rank === null) return { ...el, rankCalc: { state: 'rank_none', calc: 0 } };
+
+                if (el.last_rank === Infinity) return { ...el, rankCalc: { state: 'rank_new', calc: 0 } }
+
+                if (index > el.last_rank) return { ...el, rankCalc: { state: 'rank_down', calc: (index - el.last_rank) } }
+
+                if (el.last_rank > index) return { ...el, rankCalc: { state: 'rank_up', calc: (el.last_rank - index) } }
+
+                return { ...el, rankCalc: { state: 'rank_same', calc: 0 } };
+            });
+
+            return send
+        });
+    }
+};

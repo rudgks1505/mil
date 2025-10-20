@@ -3,7 +3,7 @@
 import styles from "../page.module.css";
 import { useRouter } from 'next/navigation';
 
-export default function Page(): React.ReactElement {
+export default function Page() {
 
     const router = useRouter();
 

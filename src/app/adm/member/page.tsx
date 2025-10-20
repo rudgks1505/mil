@@ -36,7 +36,7 @@ export default function Page() {
 
 
             return zodResult.data;
-        } catch (error: any) {
+        } catch (error: unknown) {
             throw error;
         }
 
@@ -49,9 +49,7 @@ export default function Page() {
     const [items, setItems] = useState<Member[] | AdmMember[]>([]);
 
     useEffect(() => {
-        if (item) {
-            setItems(item.map(el => ({ ...el })));
-        }
+        if (item) setItems(item.map(el => ({ ...el })));
     }, [item])
 
     if (isLoading) return <p>로딩 중...</p>;

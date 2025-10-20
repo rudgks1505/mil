@@ -2,17 +2,16 @@
 
 import Mainvisual from '@/components/adm/mainvisual/mainvisual';
 import styles from "../page.module.css";
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { mutate } from "swr";
 import type { TablesInsert } from "@/types/helper";
 import { fileSet } from "@/lib/adm/utils";
-import { useUploadstate } from "@/hook/hook";
 import { publicMainvisualInsertSchema } from "@/types/zodSchemas";
-import { slide_order } from "@/types/schemas";
+import { slide_order, upload } from "@/types/schemas";
 
 type MainvisualInsert = TablesInsert<"mainvisual">;
 
-export default function Page(): React.ReactElement {
+export default function Page() {
 
     const mainvisualUpdate = async (
     ) => {
@@ -66,15 +65,16 @@ export default function Page(): React.ReactElement {
             mutate("/api/adm/mainvisual");
             alert('등록 완료');
 
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
     }
 
-    const send_slide_order = (data: slide_order) => {
+    const send_slide_order = useCallback((data: slide_order) => {
         set_slide_order_props(data.map(el => ({ ...el })));
-    };
+    }, []);
     const [slide_order_props, set_slide_order_props] = useState<slide_order>([]);
     const [inp, setInp] = useState<MainvisualInsert>({
         agree: false,
@@ -84,7 +84,12 @@ export default function Page(): React.ReactElement {
         book_link: '',
     });
 
-    const { uploadstate, setUploadstate } = useUploadstate();
+    const [uploadstate, setUploadstate] = useState<upload[]>([{
+        file: null,
+        id: 0,
+        m: null,
+    }]);
+
 
     return (
         <>

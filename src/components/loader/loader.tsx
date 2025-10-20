@@ -1,7 +1,7 @@
 "use client"
 
 import { useAppDispatch, useAppSelector } from "@/hook/hook";
-import { on, off } from "@/store/loaderSlice";
+import { off } from "@/store/loaderSlice";
 import { useEffect } from 'react';
 
 
@@ -12,7 +12,7 @@ export default function Page() {
 
     useEffect(() => {
         dispatch(off());
-    }, [])
+    }, [dispatch])
 
 
     return (

@@ -28,39 +28,30 @@ export default function Page() {
                 throw new Error("유효성 검사 실패");
             }
             return zodItems.data;
-        } catch (error: any) {
-            throw error;
+        } catch (err: unknown) {
+            throw err;
         }
 
     }
     const supabase = createClientComponentClient();
     const [ment, setMent] = useState<string>('');
     const [key, setKey] = useState<string | null>(null);
-    const { data: item, error, isLoading } = useSWR<(BooksRow & { visited_at?: string })[]>(key, historyGet);
+    const { data: item, error } = useSWR<(BooksRow & { visited_at?: string })[]>(key, historyGet);
     const [items, setItems] = useState<(BooksRow & { visited_at?: string })[]>([]);
     const router = useRouter();
 
     useEffect(() => {
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-            try {
-                setKey(!session ? null : '/api/epub/history');
-                setMent(!session ? '로그인 후 이용 가능합니다.' : '방문 기록이 없습니다.');
-            } catch (err: any) {
-                console.error(err);
-                alert('요청 처리 중 오류.');
-                return
-            }
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setKey(!session ? null : '/api/epub/history');
+            setMent(!session ? '로그인 후 이용 가능합니다.' : '방문 기록이 없습니다.');
         })
-
         return () => {
             subscription.unsubscribe();
         };
-    }, []);
+    }, [supabase]);
 
     useEffect(() => {
-        if (item) {
-            setItems(item);
-        }
+        if (item) setItems(item);
     }, [item]);
 
 

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdm } from '@/lib/supabaseAdm';
-import { memberSchema, AdmMember, admMemberSchema } from "@/types/schemas";
+import { memberSchema, admMemberSchema } from "@/types/schemas";
 import { z } from 'zod';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
@@ -51,8 +51,9 @@ export async function GET() {
         }
 
         return NextResponse.json({ data: zodItems.data }, { status: 200 });
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) console.error(err.message);
+        else console.error(err);
         return NextResponse.json({ message: '요청 처리 중 오류.' }, { status: 500 });
     }
 }

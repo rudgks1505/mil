@@ -4,17 +4,17 @@ import styles from "@/app/adm/page.module.css";
 import useSWR, { mutate } from "swr";
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
-import { ContentChage } from "@/lib/adm/utils";
-import { deleteItemsSchema, BooksRow, BooksRowSchema } from "@/types/schemas";
+import { ContentChage, Toggle } from "@/lib/adm/utils";
+import { deleteItemsSchema } from "@/types/schemas";
 import { publicBooksInsertSchema, publicBooksRowSchema } from "@/types/zodSchemas";
-import { useToggle, useDelete } from "@/hook/hook";
+import { useDelete } from "@/hook/hook";
 import { useRouter } from 'next/navigation';
-import type { Tables, TablesUpdate, TablesInsert } from "@/types/helper";
+import type { Tables } from "@/types/helper";
 
 export default function Page() {
 
 
-    const booksGet = async (uuid: string): Promise<Tables<"books">[]> => {
+    const booksGet = async (): Promise<Tables<"books">[]> => {
         try {
             const res = await fetch(`/api/adm/books/private`);
             const data = await res.json();
@@ -28,7 +28,7 @@ export default function Page() {
                 throw new Error("유효성 검사 실패");
             }
             return zodResult.data;
-        } catch (error: any) {
+        } catch (error: unknown) {
             throw error;
         }
 
@@ -56,8 +56,9 @@ export default function Page() {
 
             mutate("/api/adm/books?qu=''&main?=false");
             alert('삭제 완료');
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
     }
@@ -85,14 +86,15 @@ export default function Page() {
 
             mutate("/api/adm/books/private");
             alert('수정 완료');
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
     }
 
     const router = useRouter();
-    const { data: item, error, isLoading } = useSWR<Tables<"books">[]>(`/api/adm/books/private`, () => booksGet(""));
+    const { data: item, error } = useSWR<Tables<"books">[]>(`/api/adm/books/private`, booksGet);
 
     const [items, setItems] = useState<Tables<"books">[]>([]);
     const [originItems, setOriginItems] = useState<Tables<"books">[]>([]);
@@ -121,7 +123,7 @@ export default function Page() {
                         <thead>
                             <tr>
                                 <th><div><input type="checkbox" onChange={(e) => {
-                                    useToggle(e.target.checked, [...allToggle], setDeleteItems);
+                                    Toggle(e.target.checked, [...allToggle], setDeleteItems);
                                 }} /></div></th>
                                 <th>책 고유번호</th>
                                 <th>장르</th>
@@ -138,7 +140,7 @@ export default function Page() {
                                             <td className={styles.th1_sticky}>
                                                 <input type="checkbox"
                                                     onChange={(e) => {
-                                                        useToggle(e.target.checked, [el.id], setDeleteItems);
+                                                        Toggle(e.target.checked, [el.id], setDeleteItems);
                                                     }}
                                                     checked={deleteItems.has(el.id) ?? false}
                                                 />

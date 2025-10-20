@@ -250,7 +250,7 @@ Output exactly one JSON object that matches the schema. No explanations, no comm
                 .map(p => `<p>${escape(p)}</p>`)
                 .join(""); // 배열 문자화
 
-            const { data: chapters, error: chaptersError } = await supabase
+            const { error: chaptersError } = await supabase
                 .from('chapters')
                 .insert([{
                     book_id: books.id,
@@ -268,12 +268,10 @@ Output exactly one JSON object that matches the schema. No explanations, no comm
         }
 
         return NextResponse.json({ status: 200 })
-    } catch (err: any) {
+    } catch (err: unknown) {
         delete_meta(supabase, bookMeteId);
-        console.error(err.message);
-        const raw = err?.raw_output ?? err?.response_text ?? err?.message ?? "";
-        // 최소한 마지막 1~2KB 로그
-        console.error("parse fail, tail:", raw.slice(-1500));
+        if (err instanceof Error) console.error(err.message);
+        else console.error(err);
         return NextResponse.json({ message: '요청 처리 중 오류.' }, { status: 500 });
     }
 }

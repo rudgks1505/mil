@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { joinSchema } from "@/types/schemas";
 
-export default function Page(): React.ReactElement {
+export default function Page() {
 
     const supabase = createClientComponentClient();
     const router = useRouter();
@@ -49,9 +49,9 @@ export default function Page(): React.ReactElement {
                 alert('비밀번호 재설정 완료하였습니다.');
                 router.push('/');
             }
-
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
     }

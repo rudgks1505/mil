@@ -7,7 +7,7 @@ import Link from "next/link";
 import { joinSchema } from "@/types/schemas";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
-export default function Page(): React.ReactElement {
+export default function Page() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -38,10 +38,11 @@ export default function Page(): React.ReactElement {
             }
             if (data) router.replace('/');
 
-        } catch (err: any) {
-            alert(err.message);
-            return;
-        }
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
+            return
+        };
     };
 
 

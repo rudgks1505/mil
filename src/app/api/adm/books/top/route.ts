@@ -24,8 +24,9 @@ export async function POST(req: Request) {
         }
 
         return NextResponse.json({ status: 200 });
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) console.error(err.message);
+        else console.error(err);
         return NextResponse.json({ message: '요청 처리 중 오류.' }, { status: 500 });
     }
 }

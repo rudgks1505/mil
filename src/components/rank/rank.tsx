@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
 import useSWR from "swr";
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Swiper as SwiperComponent, SwiperSlide } from 'swiper/react';
 import styles from './rank.module.css';
 import { z } from 'zod';
 import Image from 'next/image';
 import { BooksRow, BooksRowSchema, BooksRowRank } from "@/types/schemas";
-import { useRankCalc, } from "@/hook/hook";
+import { RankCalc } from "@/lib/adm/utils";
 import Genre from "@/components/genre/genre";
 import { useRouter } from 'next/navigation';
 
@@ -31,8 +31,8 @@ export default function Page() {
             }
 
             return zodResult.data;
-        } catch (error: any) {
-            throw error;
+        } catch (err: unknown) {
+            throw err;
         }
 
     }
@@ -42,19 +42,19 @@ export default function Page() {
         rankGet(g);
     }
 
+
     const [genre, setGenre] = useState<string>('전체');
-    const { data: item, error, isLoading } = useSWR<BooksRow[]>(`/api/rank?g=${genre}`, () => rankGet(genre));
+    const { data: item, error } = useSWR<BooksRow[]>(`/api/rank?g=${genre}`, () => rankGet(genre));
     const [items, setItems] = useState<BooksRowRank[]>([]);
     const router = useRouter();
 
+
     useEffect(() => {
         if (item) {
-            (async () => {
-                setItems(item);
-                useRankCalc(setItems, genre);
-            })();
+            setItems(item);
+            RankCalc(setItems, genre);
         }
-    }, [item]);
+    }, [item, genre]);
 
 
 
@@ -79,8 +79,8 @@ export default function Page() {
                                 }}
                                 className={styles.swiperCon}
                             >
-                                {Array.from({ length: 4 }).map((none, i) => (
-                                    <SwiperSlide style={{ width: 'auto' }}>
+                                {Array.from({ length: 4 }).map((_none, i) => (
+                                    <SwiperSlide style={{ width: 'auto' }} key={i}>
                                         {items.slice((3 * i), (3 * (i + 1))).map((el, index) => {
                                             if (!el.img_path) return;
                                             return (

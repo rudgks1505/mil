@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { Tables, TablesInsert } from "@/types/helper";
+import type { Tables } from "@/types/helper";
 import { publicBooksRowSchema, publicMemberRowSchema, publicMainvisualRowSchema } from "./zodSchemas";
 
 const PhoneRegex = /^010\d{8}$/;

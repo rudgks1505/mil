@@ -2,9 +2,7 @@ import { NextResponse, NextRequest } from 'next/server'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { z } from 'zod';
-import { publicMainvisualRowSchema } from "@/types/zodSchemas";
-import { Mainvisual, MainvisualSchema } from "@/types/schemas";
-import omit from 'lodash/omit';
+import { MainvisualSchema } from "@/types/schemas";
 import crypto from 'node:crypto';
 
 const CACHE_CTRL = 'public, no-cache';
@@ -54,8 +52,9 @@ export async function GET(req: NextRequest) {
         res.headers.set('ETag', etag);
         res.headers.set('Cache-Control', CACHE_CTRL);
         return res;
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) console.error(err.message);
+        else console.error(err);
         return NextResponse.json({ message: '요청 처리 중 오류.' }, { status: 500 });
     }
 }

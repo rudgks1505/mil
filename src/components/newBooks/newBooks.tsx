@@ -14,15 +14,11 @@ import { useRouter } from 'next/navigation';
 export default function Page() {
 
     const router = useRouter();
-    const { data: item, error, isLoading } = useSWR<BooksRow[]>("/api/adm/books?qu=''", () => booksGet(""));
+    const { data: item, error } = useSWR<BooksRow[]>("/api/adm/books?qu=''", () => booksGet(""));
     const [items, setItems] = useState<BooksRow[]>([]);
 
     useEffect(() => {
-        if (item) {
-            (async () => {
-                setItems(item);
-            })();
-        }
+        if (item) setItems(item);
     }, [item]);
 
 

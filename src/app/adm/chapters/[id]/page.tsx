@@ -31,7 +31,7 @@ export default function Page({ params }: {
                 throw new Error('유효성 검사 실패');
             }
             return zodResult.data;
-        } catch (error: any) {
+        } catch (error: unknown) {
             throw error;
         }
 
@@ -50,11 +50,11 @@ export default function Page({ params }: {
         }
     }, [item])
 
-    useEffect(() => {
-        if (items) {
-            console.log(items);
-        }
-    }, [items]);
+    // useEffect(() => {
+    //     if (items) {
+    //         console.log(items);
+    //     }
+    // }, [items]);
 
     if (isLoading) return <p>로딩 중...</p>;
     if (error) return <p>데이터를 불러오는 중 오류가 발생했습니다: {error.message}</p>;

@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { BooksRowSchema } from "@/types/schemas";
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-import omit from 'lodash/omit';
 import crypto from 'node:crypto';
 
 const CACHE_CTRL = 'public, max-age=3600, stale-while-revalidate=3600';
@@ -69,8 +68,9 @@ export async function GET(req: NextRequest) {
         res.headers.set('ETag', etag);
         res.headers.set('Cache-Control', CACHE_CTRL);
         return res;
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) console.error(err.message);
+        else console.error(err);
         return NextResponse.json({ message: '요청 처리 중 오류.' }, { status: 500 });
     }
 }

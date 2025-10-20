@@ -1,7 +1,7 @@
 'use client';
 
 import useSWR, { mutate } from "swr";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { booksGet } from "@/lib/adm/utils";
 import { BooksRow } from "@/types/schemas";
@@ -17,7 +17,7 @@ export default function Page({ uuid, epubRead }: Props) {
 
     const [key, setKey] = useState<string | null>(null);
 
-    const hitUpdate = async (
+    const hitUpdate = useCallback(async (
     ) => {
         try {
             const res = await fetch('/api/adm/books/top', {
@@ -28,11 +28,12 @@ export default function Page({ uuid, epubRead }: Props) {
             const data = await res.json();
 
             if (!res.ok) throw new Error(data.message || '알 수 없는 오류가 발생했습니다.');
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
-        };
-    }
+        }
+    }, [uuid])
 
     const marksUpdate = async (
     ) => {
@@ -60,8 +61,9 @@ export default function Page({ uuid, epubRead }: Props) {
             if (!res.ok) throw new Error(data.message || '알 수 없는 오류가 발생했습니다.');
             mutate(key);
 
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
     }
@@ -81,8 +83,8 @@ export default function Page({ uuid, epubRead }: Props) {
             }
 
             return zodResult.data;
-        } catch (error: any) {
-            throw error;
+        } catch (err: unknown) {
+            throw err;
         }
     }
     const supabase = createClientComponentClient();
@@ -90,15 +92,16 @@ export default function Page({ uuid, epubRead }: Props) {
     const { data: item, error } = useSWR<BooksRow[]>(`/api/adm/books?qu=${uuid}`, () => booksGet(uuid));
     const [items, setItems] = useState<BooksRow>();
     const [reviewBoolean, setReviewBoolean] = useState<boolean>(false);
+    const [bclick, setBclick] = useState<boolean>(false);
 
     useEffect(() => {
         if (items) {
-            const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+            const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
                 try {
-                    session && setKey(`/api/epub/bookMarks?id=${uuid}`);
-                } catch (err: any) {
-                    console.error(err);
-                    alert('요청 처리 중 오류.');
+                    if (session) setKey(`/api/epub/bookMarks?id=${uuid}`);
+                } catch (err: unknown) {
+                    if (err instanceof Error) alert(err.message);
+                    else console.error(err);
                     return
                 }
             })
@@ -107,7 +110,7 @@ export default function Page({ uuid, epubRead }: Props) {
                 subscription.unsubscribe();
             };
         }
-    }, [items]);
+    }, [supabase, uuid, items]);
 
 
     useEffect(() => {
@@ -123,9 +126,16 @@ export default function Page({ uuid, epubRead }: Props) {
 
     useEffect(() => {
         (async () => {
-            await hitUpdate();
+            try {
+                await hitUpdate();
+            } catch (err: unknown) {
+                if (err instanceof Error) alert(err.message);
+                else console.error(err);
+                return
+            }
+
         })();
-    }, []);
+    }, [hitUpdate]);
 
 
     if (error || bookMarks_err) return <p>데이터를 불러오는 중 오류가 발생했습니다: {error?.message || bookMarks_err?.message}</p>;
@@ -179,7 +189,7 @@ export default function Page({ uuid, epubRead }: Props) {
                         )}
 
                         <div className={styles.con_r_bottom}>
-                            <button onClick={epubRead}>바로읽기</button>
+                            <button onClick={() => { setBclick(true); bclick ? null : epubRead() }}>바로읽기</button>
                             <button onClick={() => { setReviewBoolean((prev) => prev ? false : true) }}>
                                 {reviewBoolean ? (
                                     <span>메타데이터 읽기</span>

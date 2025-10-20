@@ -2,15 +2,16 @@
 
 import { use } from 'react';
 import ePub, { Rendition } from 'epubjs';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { buildEpubArrayBuffer } from "@/lib/epub/jsZip";
 import Top from '@/components/bookDetail/top';
 import styles from "./page.module.css";
 import Select, { type StylesConfig } from "react-select";
 import { ReactSelect } from "@/types/schemas";
 import { publicUserBooksInsertSchema, publicUserBooksRowSchema, publicHistoryInsertSchema } from "@/types/zodSchemas";
-import type { Tables, TablesInsert } from "@/types/helper";
+import type { TablesInsert } from "@/types/helper";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { debounce } from "lodash";
 
 type PublicUserBooksInsert = TablesInsert<"user_books">;
 
@@ -19,9 +20,21 @@ export default function Page({
 }: {
     params: Promise<{ id: string }>
 }) {
+    const useParams = use(params);
+    const [userOption, setUserOption] = useState<Omit<PublicUserBooksInsert, 'user_id'>>(
+        {
+            background_color: '#ffffff',
+            book_uuid: useParams.id,
+            cfi: '',
+            font_color: '#111111',
+            font_height: '1.5',
+            font_size: '16px',
+            font_weight: '500',
+            spread: 'none',
+        }
+    );
 
-
-    const user_books_get = async (
+    const user_books_get = useCallback(async (
     ) => {
         try {
             const res = await fetch(`/api/epub/userBooks?id=${useParams.id}`);
@@ -36,15 +49,18 @@ export default function Page({
                 }
                 setUserOption(zodResult.data);
             }
-        } catch (error: any) {
-            alert(error.message);
+            return
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
-    }
+    }, [useParams.id]);
 
-    const user_books_post = async (
+    const user_books_post = useCallback(async (
     ) => {
         try {
+            if (!userOption.cfi) return
             const zodResult = publicUserBooksInsertSchema.omit({ user_id: true }).safeParse(userOption);
             if (!zodResult.success) {
                 console.error(zodResult.error.issues);
@@ -58,17 +74,18 @@ export default function Page({
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || '알 수 없는 오류가 발생했습니다.');
 
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
-    }
+    }, [userOption, useParams.id]);
 
 
-    const history_post = async (
+    const history_post = useCallback(async (
     ) => {
         try {
-            const zodResult = publicHistoryInsertSchema.pick({ book_uuid: true }).safeParse(userOption);
+            const zodResult = publicHistoryInsertSchema.pick({ book_uuid: true }).safeParse({ book_uuid: useParams.id });
             if (!zodResult.success) {
                 console.error(zodResult.error.issues);
                 throw new Error('유효성 검사 실패');
@@ -82,19 +99,22 @@ export default function Page({
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || '알 수 없는 오류가 발생했습니다.');
 
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
-    }
-
+    }, [useParams.id]);
     const supabase = createClientComponentClient();
     const didRun = useRef(false);
     const ref = useRef<HTMLDivElement | null>(null);
     const rendRef = useRef<Rendition | null>(null);
     const [ready, setReady] = useState(false);
-    const useParams = use(params);
-    const [colorArr, SetColorArr] = useState<string[]>([
+
+    const user_books_post_memo = useMemo(() => debounce(user_books_post, 3000), [user_books_post]);
+
+
+    const [colorArr, _setColorArr] = useState<string[]>([
         '#ffffff',
         '#FAF9F6',
         '#F5F5DC',
@@ -102,7 +122,7 @@ export default function Page({
         '#121212',
     ]);
 
-    const [fontColorArr, SetFontColorArr] = useState<string[]>([
+    const [fontColorArr, _setFontColorArr] = useState<string[]>([
         '#FAF9F6',
         '#E0E0E0',
         '#F5F5DC',
@@ -110,7 +130,7 @@ export default function Page({
         '#111111',
     ]);
 
-    const [fontSizeArr, SetFontSizeArr] = useState<string[]>([
+    const [fontSizeArr, _setFontSizeArr] = useState<string[]>([
         '14px',
         '16px',
         '18px',
@@ -118,7 +138,7 @@ export default function Page({
         '22px',
     ]);
 
-    const [fontWeightArr, SetFontWeightArr] = useState<string[]>([
+    const [fontWeightArr, _setFontWeightArr] = useState<string[]>([
         '300',
         '400',
         '500',
@@ -126,7 +146,7 @@ export default function Page({
         '700',
     ]);
 
-    const [fontHeightArr, SetFontHeightArr] = useState<string[]>([
+    const [fontHeightArr, _setFontHeightArr] = useState<string[]>([
         '1.3',
         '1.4',
         '1.5',
@@ -148,18 +168,7 @@ export default function Page({
     const goNext = () => rendRef.current?.next();
     const goPrev = () => rendRef.current?.prev();
 
-    const [userOption, setUserOption] = useState<Omit<PublicUserBooksInsert, 'user_id'>>(
-        {
-            background_color: '#ffffff',
-            book_uuid: useParams.id,
-            cfi: '',
-            font_color: '#111111',
-            font_height: '1.5',
-            font_size: '16px',
-            font_weight: '500',
-            spread: 'none',
-        }
-    );
+
 
     const epubBackColor = (color: string) => {
         setUserOption((prev) => {
@@ -217,7 +226,7 @@ export default function Page({
             ...base,
             display: 'inline-block',
         }),
-        control: (base, state) => ({
+        control: (base, _state) => ({
             ...base,
             boxShadow: "none",
             width: 120,
@@ -236,11 +245,11 @@ export default function Page({
                     : base.backgroundColor,
             color: "black",
         }),
-        menu: (base, state) => ({
+        menu: (base, _state) => ({
             ...base,
             width: 300,
         }),
-        menuList: (base, state) => ({
+        menuList: (base, _state) => ({
             ...base,
             whiteSpace: "nowrap",
         }),
@@ -315,28 +324,39 @@ export default function Page({
         didRun.current = true;
 
         (async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) return
-
-            await user_books_get();
-            await history_post();
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) return
+                await user_books_get();
+                await history_post();
+            } catch (err) {
+                console.error(err);
+            }
         })()
 
         return () => {
             rendRef.current?.destroy();
             rendRef.current = null;
         };
-    }, []);
+    }, [supabase, user_books_get, history_post]);
 
     useEffect(() => {
+
         if (ready) {
             (async () => {
-                const { data: { session } } = await supabase.auth.getSession();
-                if (!session) return
-                await user_books_post();
+                try {
+                    const { data: { session } } = await supabase.auth.getSession();
+                    if (!session) return
+                    await user_books_post_memo();
+                } catch (err) {
+                    console.error(err);
+                }
             })()
         }
-    }, [userOption]);
+
+        return () => user_books_post_memo.cancel();
+
+    }, [ready, supabase, user_books_post_memo]);
 
     return (
         <>
@@ -401,7 +421,7 @@ export default function Page({
                             styles={reactSelectStyles}
                             onChange={(opt) => {
                                 setReactNaviLabel(opt);
-                                opt && epubChapterMove(opt.value);
+                                if (opt) epubChapterMove(opt.value);
                             }}
                         />
                         <button onClick={goPrev} disabled={!ready}>이전</button>

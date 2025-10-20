@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { joinSchema } from "@/types/schemas";
 
-export default function Page(): React.ReactElement {
+export default function Page() {
 
     const router = useRouter();
     const [email, setEmail] = useState('');
@@ -36,8 +36,9 @@ export default function Page(): React.ReactElement {
 
             router.push(`/auth/find/${data.data.uuid}`);
 
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
     }

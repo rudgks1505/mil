@@ -106,6 +106,7 @@
     z-index: 2;
     box-sizing: border-box;
     bottom: 0;
+    left: 0;
 }
 
 .swiperSlide>a>div>h1 {

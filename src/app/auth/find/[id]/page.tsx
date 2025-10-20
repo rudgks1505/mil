@@ -1,7 +1,7 @@
 'use client';
 
 import styles from "../../page.module.css";
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { use } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -16,7 +16,7 @@ export default function Page({ params }: {
     const useParams = use(params);
     const didRun = useRef(false);
 
-    const emailSend = async (
+    const emailSend = useCallback(async (
     ) => {
         try {
             const res = await fetch(`/api/auth/find/${useParams.id}`);
@@ -37,11 +37,13 @@ export default function Page({ params }: {
 
             alert('이메일로 발송된 재설정 링크를 클릭해 주세요.\n스팸함에 도착한 경우 링크가 잘릴 수 있으니, 받은편지함으로 이동해 확인해 주세요.');
 
-        } catch (error: any) {
-            alert(error.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) alert(err.message);
+            else console.error(err);
             return
         };
-    }
+    }, [supabase, useParams.id]
+    );
 
     useEffect(() => {
         if (didRun.current) return;
@@ -50,7 +52,7 @@ export default function Page({ params }: {
         (async () => {
             await emailSend();
         })()
-    }, [])
+    }, [emailSend])
 
 
     return (

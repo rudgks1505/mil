@@ -117,8 +117,9 @@ Hard constraints:
 
 
         return NextResponse.json({ data: { book_covers_path: book_covers_path } }, { status: 200 })
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) console.error(err.message);
+        else console.error(err);
         return NextResponse.json({ message: '요청 처리 중 오류.' }, { status: 500 });
     }
 }
