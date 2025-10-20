@@ -7,7 +7,7 @@ const CACHE_CTRL = 'public, max-age=3600, stale-while-revalidate=3600';
 
 export async function GET(
     req: NextRequest,
-    ctx: { params: { bucket: string; path: string[] } }
+    ctx: { params: Promise<{ bucket: string; path: string[] }> }
 ) {
     const { bucket, path } = await ctx.params;
     const filePath = path.join('/');
