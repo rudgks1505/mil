@@ -7,11 +7,11 @@ export default function Page() {
                 <p>Next.js 15 · Supabase · Vercel</p>
                 <p><span>Email: rudgks1505@gmail.com ·</span>&nbsp;
                     <a
-                        href="https://github.com/rudgks1505/milpor"
+                        href="https://github.com/rudgks1505/mil"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        GitHub: https://github.com/rudgks1505/milpor
+                        GitHub: https://github.com/rudgks1505/mil
                     </a>
                 </p>
             </div>
